@@ -8,11 +8,13 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class VideoUploadScreen extends StatefulWidget {
   final int trainerId;
   final String trainerName;
+  final String trainerGoalCategory;
 
   const VideoUploadScreen({
     Key? key,
     required this.trainerId,
     required this.trainerName,
+    required this.trainerGoalCategory,
   }) : super(key: key);
 
   @override
@@ -49,13 +51,50 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
   @override
   void initState() {
     super.initState();
-    // For now, set weight_loss as default for liju (trainer ID 1)
-    // In production, fetch from trainer profile API
+    // Set goal type from trainer's assigned category
     setState(() {
-      _selectedGoalType = 'weight_loss';
-      _trainerGoalType = 'weight_loss';
+      _selectedGoalType = widget.trainerGoalCategory;
+      _trainerGoalType = widget.trainerGoalCategory;
       _isLoadingGoal = false;
     });
+  }
+
+  Future<void> _fetchTrainerGoalType() async {
+    print('Fetching trainer goal for ID: ${widget.trainerId}');
+    try {
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:8000/api/trainers/${widget.trainerId}/'),
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Decoded data: $data');
+        setState(() {
+          _trainerGoalType = data['goal_category'] ?? 'weight_loss';
+          _selectedGoalType = _trainerGoalType;
+          _isLoadingGoal = false;
+        });
+        print('Goal type set to: $_selectedGoalType');
+      } else {
+        print('API returned non-200 status');
+        // Fallback to default
+        setState(() {
+          _selectedGoalType = 'weight_loss';
+          _trainerGoalType = 'weight_loss';
+          _isLoadingGoal = false;
+        });
+      }
+    } catch (e) {
+      print('Error fetching trainer goal: $e');
+      setState(() {
+        _selectedGoalType = 'weight_loss';
+        _trainerGoalType = 'weight_loss';
+        _isLoadingGoal = false;
+      });
+    }
   }
 
   Future<void> _pickVideo() async {

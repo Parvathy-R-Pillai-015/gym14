@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'admin_chat_view_screen.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -145,6 +146,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   Colors.purple,
                   () {
                     Navigator.pushNamed(context, '/add-trainer');
+                  },
+                ),
+                _buildActionCard(
+                  'Chat Messages',
+                  Icons.chat_bubble,
+                  const Color(0xFF4CAF50),
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AdminChatViewScreen(),
+                      ),
+                    );
                   },
                 ),
                 _buildActionCard(

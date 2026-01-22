@@ -410,7 +410,7 @@ class WorkoutVideo(models.Model):
     min_weight_difference = models.IntegerField(default=0, verbose_name="Min Weight Difference (kg)")
     max_weight_difference = models.IntegerField(default=10, verbose_name="Max Weight Difference (kg)")
     duration = models.IntegerField(null=True, blank=True, verbose_name="Duration (seconds)")
-    uploaded_by = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name='uploaded_videos')
+    uploaded_by = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name='uploaded_videos', null=True, blank=True)
     uploaded_via = models.CharField(max_length=10, choices=UPLOAD_TYPE_CHOICES, default='web', verbose_name="Upload Type")
     day_number = models.IntegerField(null=True, blank=True, verbose_name="Day Number (for daily progression)")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
@@ -446,3 +446,29 @@ class VideoRecommendation(models.Model):
     
     def __str__(self):
         return f"{self.video.title} → {self.user.user.name}"
+
+
+class ChatMessage(models.Model):
+    """
+    ChatMessage model to store messages between users and trainers
+    """
+    SENDER_CHOICES = [
+        ('user', 'User'),
+        ('trainer', 'Trainer'),
+    ]
+    
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='chat_messages')
+    trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name='chat_messages')
+    message = models.TextField(verbose_name="Message")
+    sender_type = models.CharField(max_length=10, choices=SENDER_CHOICES, verbose_name="Sender Type")
+    is_read = models.BooleanField(default=False, verbose_name="Is Read")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+    
+    class Meta:
+        db_table = 'chat_message'
+        verbose_name = 'Chat Message'
+        verbose_name_plural = 'Chat Messages'
+        ordering = ['created_at']
+    
+    def __str__(self):
+        return f"{self.sender_type}: {self.message[:50]}"

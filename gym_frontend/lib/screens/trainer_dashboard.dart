@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'video_upload_screen.dart';
 import 'manage_videos_screen.dart';
+import 'trainer_chat_list_screen.dart';
 
 class TrainerDashboard extends StatefulWidget {
   final int trainerId;
@@ -24,6 +25,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
   List<Map<String, dynamic>> _reviews = [];
   double _averageRating = 0.0;
   bool _isLoading = true;
+  String _trainerGoalCategory = 'weight_loss';
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
       _loadAssignedUsers(),
       _loadPendingAttendance(),
       _loadReviews(),
+      _loadTrainerDetails(),
     ]);
     setState(() => _isLoading = false);
   }
@@ -119,6 +122,25 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
       }
     } catch (e) {
       print('Error loading reviews: $e');
+    }
+  }
+
+  Future<void> _loadTrainerDetails() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:8000/api/trainers/${widget.trainerId}/'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success']) {
+          setState(() {
+            _trainerGoalCategory = data['goal_category'] ?? 'weight_loss';
+          });
+        }
+      }
+    } catch (e) {
+      print('Error loading trainer details: $e');
     }
   }
 
@@ -573,6 +595,20 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
         backgroundColor: const Color(0xFF7B4EFF),
         foregroundColor: Colors.white,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.chat_bubble),
+            tooltip: 'Chat Messages',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TrainerChatListScreen(
+                    trainerId: widget.trainerId,
+                  ),
+                ),
+              );
+            },
+          ),
           IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
           IconButton(
             icon: const Icon(Icons.logout),
@@ -696,6 +732,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                                   builder: (context) => VideoUploadScreen(
                                     trainerId: widget.trainerId,
                                     trainerName: widget.trainerName,
+                                    trainerGoalCategory: _trainerGoalCategory,
                                   ),
                                 ),
                               );

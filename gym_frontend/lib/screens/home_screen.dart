@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'workout_videos_screen.dart';
+import 'chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final int userId;
@@ -531,7 +532,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildProfileCard(),
                     const SizedBox(height: 30),
                     const Text(
-                      'Workout Categories',
+                      'Quick Actions',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -540,22 +541,40 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
-                      height: 400,
+                      height: 200,
                       child: GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 20,
                         mainAxisSpacing: 20,
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
-                          _buildWorkoutCard(
-                            'Cardio',
-                            Icons.directions_run,
-                            const Color(0xFFFF6B6B),
-                          ),
-                          _buildWorkoutCard(
-                            'Strength',
-                            Icons.fitness_center,
-                            const Color(0xFF7B4EFF),
+                          _buildActionCard(
+                            'Chat with Trainer',
+                            Icons.chat_bubble,
+                            const Color(0xFF4CAF50),
+                            () {
+                              if (_userProfile != null && _userProfile!['assigned_trainer'] != null) {
+                                final trainer = _userProfile!['assigned_trainer'];
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                      userId: _userProfile!['user_id'],
+                                      trainerId: trainer['id'],
+                                      trainerName: trainer['name'] ?? 'Trainer',
+                                      senderType: 'user',
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('No trainer assigned yet'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            },
                           ),
                           _buildWorkoutCard(
                             'Yoga',
@@ -566,6 +585,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Stretching',
                             Icons.accessibility_new,
                             const Color(0xFFFFBE0B),
+                          ),
+                          _buildActionCard(
+                            'My Progress',
+                            Icons.trending_up,
+                            const Color(0xFF9C27B0),
+                            () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Progress tracking coming soon!'),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -1193,6 +1224,48 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildActionCard(String title, IconData icon, Color color, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, size: 40, color: color),
+            ),
+            const SizedBox(height: 15),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

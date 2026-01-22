@@ -32,6 +32,7 @@ urlpatterns = [
     # Trainer APIs
     path('api/trainer/<int:trainer_id>/users/', views.get_trainer_users, name='get_trainer_users'),
     path('api/trainer/<int:trainer_id>/attendance/pending/', views.get_pending_attendance_requests, name='get_pending_attendance_requests'),
+    path('api/trainers/<int:trainer_id>/', views.get_trainer_details, name='get_trainer_details'),
     
     # Attendance APIs
     path('api/attendance/request/', views.request_attendance, name='request_attendance'),
@@ -57,6 +58,12 @@ urlpatterns = [
     path('api/videos/user/<int:user_id>/', views.get_user_videos, name='get_user_videos'),
     path('api/videos/<int:video_id>/delete/', views.delete_video, name='delete_video'),
     path('api/videos/recommend/', views.recommend_video_to_user, name='recommend_video_to_user'),
+    
+    # Chat APIs
+    path('api/chat/send/', views.send_chat_message, name='send_chat_message'),
+    path('api/chat/messages/<int:user_id>/<int:trainer_id>/', views.get_chat_messages, name='get_chat_messages'),
+    path('api/chat/trainer/<int:trainer_id>/', views.get_trainer_chats, name='get_trainer_chats'),
+    path('api/chat/admin/all/', views.get_all_chats_admin, name='get_all_chats_admin'),
     
     # Admin APIs
     path('api/admin/users/all/', admin_views.get_all_users, name='get_all_users'),

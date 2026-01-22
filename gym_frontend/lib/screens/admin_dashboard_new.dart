@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'trainer_management_tab.dart';
+import 'admin_chat_tab.dart';
 
 class AdminDashboardNew extends StatefulWidget {
   const AdminDashboardNew({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 6, vsync: this);
     _loadAllData();
   }
   
@@ -138,6 +139,7 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
             Tab(text: 'Unpaid Users'),
             Tab(text: 'Trainers'),
             Tab(text: 'Reviews'),
+            Tab(text: 'Chats'),
           ],
         ),
         actions: [
@@ -163,6 +165,7 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
                 _buildUnpaidUsersTab(),
                 const TrainerManagementTab(),
                 _buildReviewsTab(),
+                const AdminChatTab(),
               ],
             ),
     );

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserLogin, Trainer, WorkoutVideo
+from .models import UserLogin, Trainer, WorkoutVideo, ChatMessage
 
 # Register your models here.
 
@@ -83,3 +83,32 @@ class WorkoutVideoAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('uploaded_by', 'uploaded_by__user')
+
+@admin.register(ChatMessage)
+class ChatMessageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'get_user_name', 'get_trainer_name', 'sender_type', 'is_read', 'created_at')
+    list_filter = ('sender_type', 'is_read', 'created_at')
+    search_fields = ('user__user__name', 'trainer__user__name', 'message')
+    readonly_fields = ('created_at',)
+    ordering = ('-created_at',)
+    
+    def get_user_name(self, obj):
+        return obj.user.user.name
+    get_user_name.short_description = 'User'
+    
+    def get_trainer_name(self, obj):
+        return obj.trainer.user.name
+    get_trainer_name.short_description = 'Trainer'
+    
+    fieldsets = (
+        ('Chat Participants', {
+            'fields': ('user', 'trainer')
+        }),
+        ('Message Details', {
+            'fields': ('message', 'sender_type', 'is_read')
+        }),
+        ('Timestamp', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )

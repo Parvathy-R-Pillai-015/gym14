@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 import json
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
-from .models import UserLogin, Trainer, UserProfile, Attendance, Review, FoodItem, DietPlanTemplate, UserDietPlan, WorkoutVideo, VideoRecommendation
+from .models import UserLogin, Trainer, UserProfile, Attendance, Review, FoodItem, DietPlanTemplate, UserDietPlan, WorkoutVideo, VideoRecommendation, ChatMessage
 
 # Create your views here.
 
@@ -1709,4 +1709,302 @@ def recommend_video_to_user(request):
     return JsonResponse({
         'success': False,
         'message': 'Only POST method is allowed'
+    }, status=405)
+
+
+@csrf_exempt
+def get_trainer_details(request, trainer_id):
+    """
+    Get trainer details by ID
+    """
+    if request.method == 'GET':
+        try:
+            trainer = Trainer.objects.get(id=trainer_id)
+            
+            return JsonResponse({
+                'success': True,
+                'id': trainer.id,
+                'name': trainer.user.name,
+                'email': trainer.user.emailid,
+                'mobile': trainer.mobile,
+                'gender': trainer.gender,
+                'experience': trainer.experience,
+                'specialization': trainer.specialization,
+                'certification': trainer.certification,
+                'goal_category': trainer.goal_category,
+                'joining_period': trainer.joining_period,
+                'is_active': trainer.is_active
+            }, status=200)
+            
+        except Trainer.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Trainer not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Only GET method is allowed'
+    }, status=405)
+
+
+@csrf_exempt
+def get_trainer_details(request, trainer_id):
+    '''Get trainer details by ID'''
+    if request.method == 'GET':
+        try:
+            trainer = Trainer.objects.get(id=trainer_id)
+            return JsonResponse({'success': True, 'id': trainer.id, 'name': trainer.user.name, 'email': trainer.user.emailid, 'mobile': trainer.mobile, 'gender': trainer.gender, 'experience': trainer.experience, 'specialization': trainer.specialization, 'certification': trainer.certification, 'goal_category': trainer.goal_category, 'joining_period': trainer.joining_period, 'is_active': trainer.is_active}, status=200)
+        except Trainer.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Trainer not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+    return JsonResponse({'success': False, 'message': 'Only GET method is allowed'}, status=405)
+
+
+# ===== CHAT SYSTEM API ENDPOINTS =====
+
+@csrf_exempt
+def send_chat_message(request):
+    """
+    Send a chat message from user to trainer or trainer to user
+    """
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            trainer_id = data.get('trainer_id')
+            message = data.get('message')
+            sender_type = data.get('sender_type')  # 'user' or 'trainer'
+            
+            if not all([user_id, trainer_id, message, sender_type]):
+                return JsonResponse({
+                    'success': False,
+                    'message': 'user_id, trainer_id, message, and sender_type are required'
+                }, status=400)
+            
+            user_profile = UserProfile.objects.get(user_id=user_id)
+            trainer = Trainer.objects.get(id=trainer_id)
+            
+            # Create chat message
+            chat_message = ChatMessage.objects.create(
+                user=user_profile,
+                trainer=trainer,
+                message=message,
+                sender_type=sender_type,
+                is_read=False
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Message sent successfully',
+                'chat_message': {
+                    'id': chat_message.id,
+                    'message': chat_message.message,
+                    'sender_type': chat_message.sender_type,
+                    'created_at': chat_message.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                    'is_read': chat_message.is_read
+                }
+            }, status=201)
+            
+        except UserProfile.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'User profile not found'
+            }, status=404)
+        except Trainer.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Trainer not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Only POST method is allowed'
+    }, status=405)
+
+
+@csrf_exempt
+def get_chat_messages(request, user_id, trainer_id):
+    """
+    Get all chat messages between a user and trainer
+    """
+    if request.method == 'GET':
+        try:
+            user_profile = UserProfile.objects.get(user_id=user_id)
+            trainer = Trainer.objects.get(id=trainer_id)
+            
+            messages = ChatMessage.objects.filter(
+                user=user_profile,
+                trainer=trainer
+            ).order_by('created_at')
+            
+            messages_list = []
+            for msg in messages:
+                messages_list.append({
+                    'id': msg.id,
+                    'message': msg.message,
+                    'sender_type': msg.sender_type,
+                    'sender_name': user_profile.user.name if msg.sender_type == 'user' else trainer.user.name,
+                    'is_read': msg.is_read,
+                    'created_at': msg.created_at.strftime('%Y-%m-%d %H:%M:%S')
+                })
+            
+            # Mark all trainer messages as read by user (or vice versa)
+            unread_messages = messages.exclude(sender_type=request.GET.get('reader_type', 'user'))
+            unread_messages.update(is_read=True)
+            
+            return JsonResponse({
+                'success': True,
+                'messages': messages_list,
+                'total_messages': len(messages_list)
+            }, status=200)
+            
+        except UserProfile.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'User profile not found'
+            }, status=404)
+        except Trainer.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Trainer not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Only GET method is allowed'
+    }, status=405)
+
+
+@csrf_exempt  
+def get_trainer_chats(request, trainer_id):
+    """
+    Get all users who have chatted with this trainer
+    """
+    if request.method == 'GET':
+        try:
+            trainer = Trainer.objects.get(id=trainer_id)
+            
+            # Get distinct users who have chatted with this trainer
+            user_ids = ChatMessage.objects.filter(trainer=trainer).values_list('user_id', flat=True).distinct()
+            
+            chats_list = []
+            for user_profile in UserProfile.objects.filter(id__in=user_ids):
+                # Get last message
+                last_message = ChatMessage.objects.filter(
+                    user=user_profile,
+                    trainer=trainer
+                ).order_by('-created_at').first()
+                
+                # Count unread messages from user
+                unread_count = ChatMessage.objects.filter(
+                    user=user_profile,
+                    trainer=trainer,
+                    sender_type='user',
+                    is_read=False
+                ).count()
+                
+                chats_list.append({
+                    'user_id': user_profile.user.id,
+                    'user_name': user_profile.user.name,
+                    'user_email': user_profile.user.emailid,
+                    'last_message': last_message.message if last_message else '',
+                    'last_message_time': last_message.created_at.strftime('%Y-%m-%d %H:%M:%S') if last_message else '',
+                    'unread_count': unread_count
+                })
+            
+            return JsonResponse({
+                'success': True,
+                'chats': chats_list,
+                'total_chats': len(chats_list)
+            }, status=200)
+            
+        except Trainer.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Trainer not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Only GET method is allowed'
+    }, status=405)
+
+
+@csrf_exempt
+def get_all_chats_admin(request):
+    """
+    Get all chat conversations for admin
+    """
+    if request.method == 'GET':
+        try:
+            # Get all distinct user-trainer pairs
+            chats = ChatMessage.objects.values('user_id', 'trainer_id').distinct()
+            
+            chats_list = []
+            for chat in chats:
+                user_profile = UserProfile.objects.get(id=chat['user_id'])
+                trainer = Trainer.objects.get(id=chat['trainer_id'])
+                
+                # Get last message
+                last_message = ChatMessage.objects.filter(
+                    user_id=chat['user_id'],
+                    trainer_id=chat['trainer_id']
+                ).order_by('-created_at').first()
+                
+                # Get total message count
+                message_count = ChatMessage.objects.filter(
+                    user_id=chat['user_id'],
+                    trainer_id=chat['trainer_id']
+                ).count()
+                
+                chats_list.append({
+                    'user_id': user_profile.user.id,
+                    'user_name': user_profile.user.name,
+                    'user_email': user_profile.user.emailid,
+                    'trainer_id': trainer.id,
+                    'trainer_name': trainer.user.name,
+                    'trainer_specialization': trainer.specialization,
+                    'last_message': last_message.message if last_message else '',
+                    'last_message_sender': last_message.sender_type if last_message else '',
+                    'last_message_time': last_message.created_at.strftime('%Y-%m-%d %H:%M:%S') if last_message else '',
+                    'total_messages': message_count
+                })
+            
+            return JsonResponse({
+                'success': True,
+                'chats': chats_list,
+                'total_conversations': len(chats_list)
+            }, status=200)
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Only GET method is allowed'
     }, status=405)
