@@ -1506,14 +1506,20 @@ def get_user_videos(request, user_id):
                 day_number__isnull=True  # Only videos with day numbers (bulk videos)
             ).order_by('day_number')
             
-            # Get web-uploaded videos (no day restriction)
-            web_videos = WorkoutVideo.objects.filter(
+            # Get web-uploaded videos (no day restriction) - only from assigned trainer
+            web_videos_query = WorkoutVideo.objects.filter(
                 goal_type=user_profile.goal,
                 difficulty_level__in=difficulty_filter,
                 is_active=True,
                 uploaded_via='web',
                 day_number__isnull=True
-            ).order_by('-created_at')
+            )
+            
+            # Filter by assigned trainer if user has one
+            if user_profile.assigned_trainer:
+                web_videos_query = web_videos_query.filter(uploaded_by=user_profile.assigned_trainer)
+            
+            web_videos = web_videos_query.order_by('-created_at')
             
             # Get trainer-recommended videos
             recommended_video_ids = VideoRecommendation.objects.filter(
@@ -1593,7 +1599,9 @@ def get_user_videos(request, user_id):
                     'goal': user_profile.goal,
                     'weight_difference': weight_difference,
                     'days_enrolled': days_enrolled,
-                    'unlock_status': f"Day {days_enrolled}: {len([v for v in video_list if v.get('is_unlocked')])} videos available"
+                    'unlock_status': f"Day {days_enrolled}: {len([v for v in video_list if v.get('is_unlocked')])} videos available",
+                    'assigned_trainer_id': user_profile.assigned_trainer.id if user_profile.assigned_trainer else None,
+                    'assigned_trainer_name': user_profile.assigned_trainer.user.name if user_profile.assigned_trainer else None
                 }
             }, status=200)
             

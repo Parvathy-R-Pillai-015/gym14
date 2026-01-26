@@ -136,6 +136,176 @@ class _WorkoutVideosScreenState extends State<WorkoutVideosScreen> {
     );
   }
 
+  Widget _buildTrainerPicksSection() {
+    final picks = _videos
+        .where((video) => video['day_number'] == null)
+        .toList();
+
+    if (picks.isEmpty) return const SizedBox.shrink();
+
+    picks.sort((a, b) {
+      final aDate = DateTime.tryParse(a['created_at'] ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final bDate = DateTime.tryParse(b['created_at'] ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+      return bDate.compareTo(aDate);
+    });
+
+    final topPicks = picks.take(5).toList();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.workspace_premium, color: Colors.deepPurple),
+              const SizedBox(width: 8),
+              const Text(
+                'Trainer Picks',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.deepPurple.shade100),
+                ),
+                child: Text(
+                  '${picks.length} uploads',
+                  style: TextStyle(
+                    color: Colors.deepPurple.shade700,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 240,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: topPicks.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                final pick = topPicks[index];
+
+                return SizedBox(
+                  width: 240,
+                  child: GestureDetector(
+                    onTap: () => _playVideo(pick),
+                    child: Card(
+                      elevation: 4,
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                height: 120,
+                                width: double.infinity,
+                                color: Colors.grey.shade300,
+                                child: pick['thumbnail_url'] != null
+                                    ? Image.network(
+                                        'http://127.0.0.1:8000${pick['thumbnail_url']}',
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return _buildPlaceholder();
+                                        },
+                                      )
+                                    : _buildPlaceholder(),
+                              ),
+                              Positioned(
+                                top: 8,
+                                left: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.deepPurple.shade600,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Text(
+                                    'Trainer Upload',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (pick['duration'] != null)
+                                Positioned(
+                                  bottom: 8,
+                                  right: 8,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black54,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      '${(pick['duration'] / 60).toStringAsFixed(0)} min',
+                                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  pick['title'],
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Wrap(
+                                  spacing: 6,
+                                  runSpacing: 6,
+                                  children: [
+                                    _buildChip(
+                                      Icons.flag,
+                                      pick['difficulty_level'],
+                                      pick['difficulty_level'] == 'beginner' ? Colors.green : Colors.orange,
+                                    ),
+                                    _buildChip(
+                                      Icons.fitness_center,
+                                      pick['weight_range'],
+                                      Colors.blue,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildVideoCard(Map<String, dynamic> video) {
     final isRecommended = video['is_recommended'] ?? false;
     final recommendation = video['recommendation'];
@@ -449,7 +619,10 @@ class _WorkoutVideosScreenState extends State<WorkoutVideosScreen> {
                   : ListView(
                       children: [
                         _buildUnlockStatusCard(),
-                        ..._videos.map((video) => _buildVideoCard(video)),
+                        _buildTrainerPicksSection(),
+                        ..._videos
+                            .where((video) => video['day_number'] != null)
+                            .map((video) => _buildVideoCard(video)),
                         const SizedBox(height: 16),
                       ],
                     ),
