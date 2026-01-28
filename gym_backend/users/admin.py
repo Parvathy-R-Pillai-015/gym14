@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserLogin, Trainer, WorkoutVideo, ChatMessage, FoodRecipe
+from .models import UserLogin, Trainer, WorkoutVideo, ChatMessage, FoodRecipe, FoodItem, FoodEntry
 
 # Register your models here.
 
@@ -130,6 +130,59 @@ class FoodRecipeAdmin(admin.ModelAdmin):
         }),
         ('Timestamp', {
             'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+
+@admin.register(FoodItem)
+class FoodItemAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'food_category', 'diet_type', 'calories', 'protein', 'carbs', 'fats', 'serving_size', 'created_at')
+    list_filter = ('food_category', 'diet_type', 'created_at')
+    search_fields = ('name',)
+    readonly_fields = ('created_at',)
+    ordering = ('name',)
+    
+    fieldsets = (
+        ('Food Information', {
+            'fields': ('name', 'food_category', 'diet_type', 'serving_size')
+        }),
+        ('Nutritional Values (per 100g)', {
+            'fields': ('calories', 'protein', 'carbs', 'fats')
+        }),
+        ('Timestamp', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+
+@admin.register(FoodEntry)
+class FoodEntryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'get_user_name', 'get_food_name', 'quantity', 'quantity_unit', 'meal_type', 'calculated_calories', 'entry_date', 'created_at')
+    list_filter = ('meal_type', 'entry_date', 'created_at')
+    search_fields = ('user__name', 'food_item__name')
+    readonly_fields = ('created_at', 'updated_at')
+    ordering = ('-entry_date', '-created_at')
+    
+    def get_user_name(self, obj):
+        return obj.user.name
+    get_user_name.short_description = 'User'
+    
+    def get_food_name(self, obj):
+        return obj.food_item.name
+    get_food_name.short_description = 'Food Item'
+    
+    fieldsets = (
+        ('User & Food', {
+            'fields': ('user', 'food_item')
+        }),
+        ('Quantity & Meal', {
+            'fields': ('quantity', 'quantity_unit', 'meal_type', 'entry_date')
+        }),
+        ('Calories', {
+            'fields': ('calculated_calories', 'is_custom_calories')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
             'classes': ('collapse',)
         }),
     )
