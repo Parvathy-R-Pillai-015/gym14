@@ -18,16 +18,10 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from users import views, admin_views, food_views, trainer_food_views, subscription_views, recipe_views, otp_views
+from users import views, admin_views, food_views, trainer_food_views, subscription_views, recipe_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    # OTP & Registration APIs
-    path('api/auth/send-otp/', otp_views.send_otp, name='send_otp'),
-    path('api/auth/verify-otp/', otp_views.verify_otp, name='verify_otp'),
-    path('api/auth/resend-otp/', otp_views.resend_otp, name='resend_otp'),
-    
     path('api/users/create/', views.create_user, name='create_user'),
     path('api/users/login/', views.login_user, name='login_user'),
     path('api/trainers/create/', views.create_trainer, name='create_trainer'),

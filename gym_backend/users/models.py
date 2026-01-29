@@ -601,31 +601,3 @@ class FoodEntry(models.Model):
             }
         return breakdown
 
-
-class OTP(models.Model):
-    """OTP model for email-based registration verification"""
-    email = models.EmailField(max_length=255, verbose_name="Email")
-    otp_code = models.CharField(max_length=6, verbose_name="OTP Code")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
-    expires_at = models.DateTimeField(verbose_name="Expires At")
-    is_verified = models.BooleanField(default=False, verbose_name="Is Verified")
-    attempt_count = models.IntegerField(default=0, verbose_name="Verification Attempts")
-    
-    class Meta:
-        db_table = 'otp'
-        verbose_name = 'OTP'
-        verbose_name_plural = 'OTPs'
-        ordering = ['-created_at']
-    
-    def __str__(self):
-        return f"OTP for {self.email}"
-    
-    def is_expired(self):
-        """Check if OTP has expired"""
-        from django.utils import timezone
-        return timezone.now() > self.expires_at
-    
-    def is_valid(self):
-        """Check if OTP is still valid and not verified"""
-        return not self.is_expired() and not self.is_verified
-

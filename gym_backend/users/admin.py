@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserLogin, Trainer, WorkoutVideo, ChatMessage, FoodRecipe, FoodItem, FoodEntry, OTP
+from .models import UserLogin, Trainer, WorkoutVideo, ChatMessage, FoodRecipe, FoodItem, FoodEntry
 
 # Register your models here.
 
@@ -187,28 +187,4 @@ class FoodEntryAdmin(admin.ModelAdmin):
         }),
     )
 
-@admin.register(OTP)
-class OTPAdmin(admin.ModelAdmin):
-    list_display = ('id', 'email', 'otp_code', 'is_verified', 'is_expired', 'attempt_count', 'created_at', 'expires_at')
-    list_filter = ('is_verified', 'created_at', 'expires_at')
-    search_fields = ('email',)
-    readonly_fields = ('created_at', 'otp_code', 'expires_at')
-    ordering = ('-created_at',)
-    
-    def is_expired(self, obj):
-        return obj.is_expired()
-    is_expired.short_description = 'Is Expired'
-    is_expired.boolean = True
-    
-    fieldsets = (
-        ('OTP Information', {
-            'fields': ('email', 'otp_code')
-        }),
-        ('Status', {
-            'fields': ('is_verified', 'attempt_count')
-        }),
-        ('Timing', {
-            'fields': ('created_at', 'expires_at')
-        }),
-    )
 
