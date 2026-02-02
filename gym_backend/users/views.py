@@ -15,9 +15,9 @@ def create_user(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            name = data.get('name')
-            emailid = data.get('emailid')
-            password = data.get('password')
+            name = data.get('name', '').strip()
+            emailid = data.get('emailid', '').strip()
+            password = data.get('password', '').strip()
             
             if not name or not emailid or not password:
                 return JsonResponse({
@@ -71,8 +71,8 @@ def login_user(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            emailid = data.get('emailid')
-            password = data.get('password')
+            emailid = data.get('emailid', '').strip()
+            password = data.get('password', '').strip()
             
             print(f"[LOGIN ATTEMPT] Email: {emailid}")  # Debug log
             

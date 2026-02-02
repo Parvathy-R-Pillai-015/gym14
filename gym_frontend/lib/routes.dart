@@ -8,6 +8,8 @@ import 'screens/add_trainer_screen.dart';
 import 'screens/user_profile_screen.dart';
 import 'screens/payment_screen.dart';
 import 'screens/trainer_dashboard.dart';
+import 'screens/payment_processing_screen.dart';
+import 'screens/set_payment_pin_screen.dart';
 
 class AppRoutes {
   static const String landing = '/';
@@ -19,6 +21,8 @@ class AppRoutes {
   static const String userProfile = '/user-profile';
   static const String payment = '/payment';
   static const String trainerDashboard = '/trainer-dashboard';
+  static const String paymentProcessing = '/payment-processing';
+  static const String setPaymentPin = '/set-payment-pin';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -65,6 +69,20 @@ class AppRoutes {
             trainerId: args['trainerId'],
             trainerName: args['trainerName'],
           ),
+        );
+      case paymentProcessing:
+        return MaterialPageRoute(
+          builder: (context) => const PaymentProcessingScreen(),
+          settings: settings,
+        );
+      case setPaymentPin:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => SetPaymentPinScreen(
+            userId: args['userId'],
+            userName: args['userName'],
+          ),
+          settings: settings,
         );
       default:
         return null;

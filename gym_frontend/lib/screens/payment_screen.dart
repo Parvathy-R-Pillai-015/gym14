@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'pin_entry_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
   final int userId;
@@ -64,42 +65,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
       return;
     }
 
-    setState(() {
-      _isProcessing = true;
-    });
-
-    // Simulate payment processing
-    await Future.delayed(const Duration(seconds: 2));
-
-    // In a real app, you would integrate with actual payment gateways here
-    // For now, we'll simulate a successful payment
-    
-    try {
-      // Update payment status in backend
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/payment/update/'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'user_id': widget.userId,
-          'payment_status': true,
-          'payment_method': _selectedPaymentMethod,
-        }),
-      );
-
-      final data = json.decode(response.body);
-
-      if (data['success']) {
-        _showSuccessDialog();
-      } else {
-        _showErrorDialog(data['message']);
-      }
-    } catch (e) {
-      _showErrorDialog('Payment failed: $e');
-    } finally {
-      setState(() {
-        _isProcessing = false;
-      });
-    }
+    // Navigate to PIN entry screen for payment verification
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PinEntryScreen(
+          userId: widget.userId,
+          userName: _userName,
+          renewalMonths: widget.months,
+          amount: widget.amount.toDouble(),
+          paymentMethod: _selectedPaymentMethod!,
+          discountPercentage: 0,
+        ),
+      ),
+    );
   }
 
   void _showSuccessDialog() {

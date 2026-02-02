@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserLogin, Trainer, WorkoutVideo, ChatMessage, FoodRecipe, FoodItem, FoodEntry, OTP
+from .models import UserLogin, Trainer, WorkoutVideo, ChatMessage, FoodRecipe, FoodItem, FoodEntry, OTP, PaymentTransaction
 
 # Register your models here.
 
@@ -195,5 +195,30 @@ class OTPAdmin(admin.ModelAdmin):
     search_fields = ('email',)
     readonly_fields = ('created_at', 'otp_code', 'expires_at')
     ordering = ('-created_at',)
+
+
+@admin.register(PaymentTransaction)
+class PaymentTransactionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'receipt_number', 'get_user_name', 'amount', 'payment_method', 'renewal_period', 'status', 'transaction_date')
+    list_filter = ('payment_method', 'status', 'renewal_period', 'transaction_date')
+    search_fields = ('user__name', 'user__emailid', 'receipt_number')
+    readonly_fields = ('transaction_date', 'receipt_number')
+    ordering = ('-transaction_date',)
+    
+    def get_user_name(self, obj):
+        return obj.user.name
+    get_user_name.short_description = 'User Name'
+    
+    fieldsets = (
+        ('User Information', {
+            'fields': ('user',)
+        }),
+        ('Payment Details', {
+            'fields': ('amount', 'payment_method', 'renewal_period', 'discount_percentage')
+        }),
+        ('Transaction Info', {
+            'fields': ('receipt_number', 'status', 'transaction_date')
+        }),
+    )
 
 

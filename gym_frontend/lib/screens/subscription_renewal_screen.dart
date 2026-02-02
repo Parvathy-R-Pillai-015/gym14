@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'pin_entry_screen.dart';
 
 class SubscriptionRenewalScreen extends StatefulWidget {
   final int userId;
@@ -39,56 +40,25 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
   ];
 
   Future<void> _renewSubscription() async {
-    setState(() => _isProcessing = true);
+    // Get selected option
+    final option = _renewalOptions.firstWhere(
+      (o) => o['months'] == _selectedMonths,
+    );
 
-    try {
-      final option = _renewalOptions.firstWhere(
-        (o) => o['months'] == _selectedMonths,
-      );
-
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/subscription/renew/'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'user_id': widget.userId,
-          'renewal_months': _selectedMonths,
-          'payment_method': _selectedPaymentMethod,
-        }),
-      );
-
-      setState(() => _isProcessing = false);
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data['success']) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Subscription renewed! Valid until ${data['new_end_date'].split('T')[0]}',
-              ),
-              backgroundColor: Colors.green,
-            ),
-          );
-          Navigator.pop(context, true);
-        }
-      } else {
-        final data = json.decode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(data['message'] ?? 'Renewal failed'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (e) {
-      setState(() => _isProcessing = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red,
+    // Navigate to PIN entry screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PinEntryScreen(
+          userId: widget.userId,
+          userName: widget.userName,
+          renewalMonths: _selectedMonths,
+          amount: option['amount'].toDouble(),
+          paymentMethod: _selectedPaymentMethod,
+          discountPercentage: option['discount'].toDouble(),
         ),
-      );
-    }
+      ),
+    );
   }
 
   @override

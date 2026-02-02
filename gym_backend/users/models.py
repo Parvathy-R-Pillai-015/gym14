@@ -124,6 +124,7 @@ class UserProfile(models.Model):
     payment_date = models.DateTimeField(null=True, blank=True, verbose_name="Last Payment Date")
     subscription_start_date = models.DateTimeField(null=True, blank=True, verbose_name="Subscription Start Date")
     subscription_end_date = models.DateTimeField(null=True, blank=True, verbose_name="Subscription End Date")
+    payment_pin = models.CharField(max_length=255, blank=True, null=True, verbose_name="Payment PIN (Hashed)")
     assigned_trainer = models.ForeignKey('Trainer', on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_users', verbose_name="Assigned Trainer")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
@@ -623,4 +624,51 @@ class OTP(models.Model):
     def is_expired(self):
         from django.utils import timezone
         return timezone.now() > self.expires_at
+
+
+class PaymentTransaction(models.Model):
+    """
+    PaymentTransaction model to store subscription payment records
+    """
+    PAYMENT_METHOD_CHOICES = [
+        ('gpay', 'GPay'),
+        ('phonepe', 'PhonePe'),
+        ('paytm', 'Paytm'),
+        ('credit_card', 'Credit Card'),
+        ('cash', 'Cash'),
+    ]
+    
+    PAYMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    ]
+    
+    RENEWAL_PERIOD_CHOICES = [
+        (1, '1 Month'),
+        (2, '2 Months'),
+        (3, '3 Months'),
+        (6, '6 Months'),
+        (8, '8 Months'),
+        (12, '12 Months'),
+    ]
+    
+    user = models.ForeignKey(UserLogin, on_delete=models.CASCADE, related_name='payment_transactions', verbose_name="User")
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, verbose_name="Payment Method")
+    renewal_period = models.IntegerField(choices=RENEWAL_PERIOD_CHOICES, verbose_name="Renewal Period (Months)")
+    transaction_date = models.DateTimeField(auto_now_add=True, verbose_name="Transaction Date")
+    status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='completed', verbose_name="Payment Status")
+    receipt_number = models.CharField(max_length=50, unique=True, verbose_name="Receipt Number")
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Discount Percentage")
+    
+    class Meta:
+        db_table = 'payment_transaction'
+        verbose_name = 'Payment Transaction'
+        verbose_name_plural = 'Payment Transactions'
+        ordering = ['-transaction_date']
+    
+    def __str__(self):
+        return f"{self.user.name} - ₹{self.amount} - {self.receipt_number}"
 

@@ -7,3 +7,9 @@ gym_backend/media/
 __pycache__/
 *.pyc
 *.sqlite3
+
+# Temporary troubleshooting scripts
+gym_backend/check_sarath_pwd.py
+gym_backend/fix_sarath_pwd.py
+gym_backend/test_sarath_login.py
+gym_backend/users/management/commands/check_sarath.py

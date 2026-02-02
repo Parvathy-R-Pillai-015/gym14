@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from users import views, admin_views, food_views, trainer_food_views, subscription_views, recipe_views, otp_views
+from users import views, admin_views, food_views, trainer_food_views, subscription_views, recipe_views, otp_views, payment_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +27,13 @@ urlpatterns = [
     path('api/auth/send-otp/', otp_views.send_otp, name='send_otp'),
     path('api/auth/verify-otp/', otp_views.verify_otp, name='verify_otp'),
     path('api/auth/resend-otp/', otp_views.resend_otp, name='resend_otp'),
+    
+    # Payment APIs
+    path('api/payment/set-pin/', payment_views.set_payment_pin, name='set_payment_pin'),
+    path('api/payment/verify-pin/', payment_views.verify_pin_and_process_payment, name='verify_pin_payment'),
+    path('api/payment/receipt/<int:transaction_id>/', payment_views.generate_payment_receipt, name='generate_receipt'),
+    path('api/payment/history/<int:user_id>/', payment_views.get_user_payment_history, name='payment_history'),
+    
     path('api/users/create/', views.create_user, name='create_user'),
     path('api/users/login/', views.login_user, name='login_user'),
     path('api/trainers/create/', views.create_trainer, name='create_trainer'),
