@@ -1545,7 +1545,10 @@ class _DietPlanDetailsDialogState extends State<_DietPlanDetailsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final mealsData = widget.dietPlan['meals_data'] as Map<String, dynamic>;
+    // Parse meals_data if it's a JSON string
+    final mealsData = widget.dietPlan['meals_data'] is String
+        ? json.decode(widget.dietPlan['meals_data'])
+        : widget.dietPlan['meals_data'] as Map<String, dynamic>;
     final is7DayPlan = mealsData.containsKey('monday');
     final currentDayMeals = is7DayPlan ? mealsData[_selectedDay] as Map<String, dynamic>? : mealsData;
 
@@ -1637,10 +1640,18 @@ class _DietPlanDetailsDialogState extends State<_DietPlanDetailsDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (currentDayMeals != null) ...[
-                      _buildMealSection('Breakfast', currentDayMeals['breakfast']),
-                      _buildMealSection('Lunch', currentDayMeals['lunch']),
-                      _buildMealSection('Dinner', currentDayMeals['dinner']),
-                      _buildMealSection('Snacks', currentDayMeals['snacks']),
+                      if (currentDayMeals.containsKey('breakfast'))
+                        _buildMealSection('Breakfast', currentDayMeals['breakfast']),
+                      if (currentDayMeals.containsKey('snack1'))
+                        _buildMealSection('Morning Snack', currentDayMeals['snack1']),
+                      if (currentDayMeals.containsKey('lunch'))
+                        _buildMealSection('Lunch', currentDayMeals['lunch']),
+                      if (currentDayMeals.containsKey('snack2'))
+                        _buildMealSection('Evening Snack', currentDayMeals['snack2']),
+                      if (currentDayMeals.containsKey('dinner'))
+                        _buildMealSection('Dinner', currentDayMeals['dinner']),
+                      if (currentDayMeals.containsKey('snacks'))
+                        _buildMealSection('Snacks', currentDayMeals['snacks']),
                     ],
                     if (widget.dietPlan['notes'] != null && 
                         widget.dietPlan['notes'].toString().isNotEmpty) ...[
@@ -1675,10 +1686,67 @@ class _DietPlanDetailsDialogState extends State<_DietPlanDetailsDialog> {
     );
   }
 
-  Widget _buildMealSection(String mealName, dynamic items) {
-    if (items == null) return const SizedBox.shrink();
+  Widget _buildMealSection(String mealName, dynamic mealData) {
+    if (mealData == null) return const SizedBox.shrink();
     
-    final itemList = items is List ? items : [];
+    // Handle new format: {items: [...], calories: xxx}
+    if (mealData is Map && mealData.containsKey('items')) {
+      final itemList = List<String>.from(mealData['items'] ?? []);
+      final calories = mealData['calories'];
+      
+      if (itemList.isEmpty) return const SizedBox.shrink();
+
+      return Card(
+        margin: const EdgeInsets.only(bottom: 12),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    mealName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color(0xFF4CAF50),
+                    ),
+                  ),
+                  Text(
+                    '$calories cal',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              ...itemList.map((item) => Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.circle, size: 6, color: Colors.green),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            item,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      );
+    }
+    
+    // Handle old format: [{food: ..., quantity: ...}]
+    final itemList = mealData is List ? mealData : [];
     if (itemList.isEmpty) return const SizedBox.shrink();
 
     return Card(

@@ -465,6 +465,13 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
   }
 
   void _showDietPlanDetails(String userName, Map<String, dynamic> dietPlan) {
+    // Parse meals_data if it's a JSON string
+    final mealsData = dietPlan['meals_data'] is String
+        ? json.decode(dietPlan['meals_data'])
+        : dietPlan['meals_data'] as Map<String, dynamic>;
+    
+    final is7DayPlan = mealsData.containsKey('monday');
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -498,39 +505,78 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  '7-Day Meal Plan:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) {
-                  final dayMeals = dietPlan['meals_data']?[day];
-                  if (dayMeals == null) return const SizedBox.shrink();
-                  
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ExpansionTile(
-                      title: Text(
-                        day.toUpperCase(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildMealSection('Breakfast', dayMeals['breakfast']),
-                              _buildMealSection('Lunch', dayMeals['lunch']),
-                              _buildMealSection('Dinner', dayMeals['dinner']),
-                              _buildMealSection('Snacks', dayMeals['snacks']),
-                            ],
-                          ),
+                if (is7DayPlan) ...[
+                  const Text(
+                    '7-Day Meal Plan:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  ...['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) {
+                    final dayMeals = mealsData[day];
+                    if (dayMeals == null) return const SizedBox.shrink();
+                    
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: ExpansionTile(
+                        title: Text(
+                          day.toUpperCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ],
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (dayMeals.containsKey('breakfast'))
+                                  _buildMealSection('Breakfast', dayMeals['breakfast']),
+                                if (dayMeals.containsKey('snack1'))
+                                  _buildMealSection('Morning Snack', dayMeals['snack1']),
+                                if (dayMeals.containsKey('lunch'))
+                                  _buildMealSection('Lunch', dayMeals['lunch']),
+                                if (dayMeals.containsKey('snack2'))
+                                  _buildMealSection('Evening Snack', dayMeals['snack2']),
+                                if (dayMeals.containsKey('dinner'))
+                                  _buildMealSection('Dinner', dayMeals['dinner']),
+                                if (dayMeals.containsKey('snacks'))
+                                  _buildMealSection('Snacks', dayMeals['snacks']),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ] else ...[
+                  const Text(
+                    'Daily Meal Plan:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Card(
+                    color: Colors.green.shade50,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (mealsData.containsKey('breakfast'))
+                            _buildMealSection('Breakfast', mealsData['breakfast']),
+                          if (mealsData.containsKey('snack1'))
+                            _buildMealSection('Morning Snack', mealsData['snack1']),
+                          if (mealsData.containsKey('lunch'))
+                            _buildMealSection('Lunch', mealsData['lunch']),
+                          if (mealsData.containsKey('snack2'))
+                            _buildMealSection('Evening Snack', mealsData['snack2']),
+                          if (mealsData.containsKey('dinner'))
+                            _buildMealSection('Dinner', mealsData['dinner']),
+                          if (mealsData.containsKey('snacks'))
+                            _buildMealSection('Snacks', mealsData['snacks']),
+                        ],
+                      ),
                     ),
-                  );
-                }).toList(),
+                  ),
+                ],
               ],
             ),
           ),
@@ -545,9 +591,47 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
     );
   }
 
-  Widget _buildMealSection(String mealName, dynamic meals) {
-    if (meals == null) return const SizedBox.shrink();
+  Widget _buildMealSection(String mealName, dynamic mealData) {
+    if (mealData == null) return const SizedBox.shrink();
     
+    // Handle new format: {items: [...], calories: xxx}
+    if (mealData is Map && mealData.containsKey('items')) {
+      final itemList = List<String>.from(mealData['items'] ?? []);
+      final calories = mealData['calories'];
+      
+      if (itemList.isEmpty) return const SizedBox.shrink();
+
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '$mealName:',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '$calories cal',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            ...itemList.map((item) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 16, bottom: 2),
+                child: Text('• $item'),
+              );
+            }).toList(),
+          ],
+        ),
+      );
+    }
+    
+    // Handle old format: [{food: ..., quantity: ...}]
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Column(
@@ -558,7 +642,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
-          ...List<Map<String, dynamic>>.from(meals).map((item) {
+          ...List<Map<String, dynamic>>.from(mealData).map((item) {
             return Padding(
               padding: const EdgeInsets.only(left: 16, bottom: 2),
               child: Text('• ${item['food']} - ${item['quantity']}'),
@@ -1304,7 +1388,11 @@ class _DietPlanDialogState extends State<_DietPlanDialog> {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              _buildMealPreview(template['meals_data']),
+                              _buildMealPreview(
+                                template['meals_data'] is String
+                                    ? json.decode(template['meals_data'])
+                                    : template['meals_data']
+                              ),
                             ],
                           ],
                         ),
@@ -1381,23 +1469,61 @@ class _DietPlanDialogState extends State<_DietPlanDialog> {
         ],
       );
     } else {
-      // Old format: direct meals
+      // Old format or new format: direct meals
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildMealSection('Breakfast', mealsData['breakfast']),
-          _buildMealSection('Lunch', mealsData['lunch']),
-          _buildMealSection('Dinner', mealsData['dinner']),
-          _buildMealSection('Snacks', mealsData['snacks']),
+          if (mealsData.containsKey('breakfast'))
+            _buildMealSection('Breakfast', mealsData['breakfast']),
+          if (mealsData.containsKey('snack1'))
+            _buildMealSection('Morning Snack', mealsData['snack1']),
+          if (mealsData.containsKey('lunch'))
+            _buildMealSection('Lunch', mealsData['lunch']),
+          if (mealsData.containsKey('snack2'))
+            _buildMealSection('Evening Snack', mealsData['snack2']),
+          if (mealsData.containsKey('dinner'))
+            _buildMealSection('Dinner', mealsData['dinner']),
+          if (mealsData.containsKey('snacks'))
+            _buildMealSection('Snacks', mealsData['snacks']),
         ],
       );
     }
   }
 
-  Widget _buildMealSection(String mealName, dynamic items) {
-    if (items == null) return const SizedBox.shrink();
+  Widget _buildMealSection(String mealName, dynamic mealData) {
+    if (mealData == null) return const SizedBox.shrink();
     
-    final itemList = items is List ? items : [];
+    // Handle new format: {items: [...], calories: xxx}
+    if (mealData is Map && mealData.containsKey('items')) {
+      final itemList = List<String>.from(mealData['items'] ?? []);
+      final calories = mealData['calories'];
+      
+      if (itemList.isEmpty) return const SizedBox.shrink();
+
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '$mealName ($calories cal)',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 11,
+                color: Colors.green,
+              ),
+            ),
+            ...itemList.map((item) => Text(
+                  '  • $item',
+                  style: const TextStyle(fontSize: 10),
+                )),
+          ],
+        ),
+      );
+    }
+    
+    // Handle old format: [{food: ..., quantity: ...}]
+    final itemList = mealData is List ? mealData : [];
     if (itemList.isEmpty) return const SizedBox.shrink();
 
     return Padding(
