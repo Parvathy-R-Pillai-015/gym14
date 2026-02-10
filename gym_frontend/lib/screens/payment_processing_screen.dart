@@ -18,6 +18,8 @@ class _PaymentProcessingScreenState extends State<PaymentProcessingScreen> {
   String _receiptNumber = '';
   int _transactionId = 0;
   String _subscriptionEndDate = '';
+  int _userId = 0;
+  String _userName = '';
 
   @override
   void initState() {
@@ -39,6 +41,11 @@ class _PaymentProcessingScreenState extends State<PaymentProcessingScreen> {
       });
       return;
     }
+
+    // Store user details from arguments
+    _userId = args['user_id'] ?? 0;
+    _userName = args['user_name'] ?? '';
+
 
     try {
       final response = await http.post(
@@ -315,17 +322,21 @@ class _PaymentProcessingScreenState extends State<PaymentProcessingScreen> {
             
             const SizedBox(height: 15),
             
-            // Back to Dashboard Button
+            // Back Button
             SizedBox(
               width: double.infinity,
               height: 55,
               child: OutlinedButton.icon(
                 onPressed: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/',
+                    (route) => false,
+                  );
                 },
-                icon: const Icon(Icons.home, color: Color(0xFF6B46C1)),
+                icon: const Icon(Icons.arrow_back, color: Color(0xFF6B46C1)),
                 label: const Text(
-                  'Back to Dashboard',
+                  'Back',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

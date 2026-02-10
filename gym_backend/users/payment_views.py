@@ -27,6 +27,7 @@ def generate_receipt_number():
 @csrf_exempt
 @require_http_methods(["POST"])
 def set_payment_pin(request):
+    
     """
     Set or update payment PIN for user
     """
@@ -427,4 +428,43 @@ def get_user_payment_history(request, user_id):
         return JsonResponse({
             'success': False,
             'message': f'Error fetching payment history: {str(e)}'
+        }, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def check_payment_pin(request):
+    """
+    Check if user has payment PIN set
+    """
+    try:
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        
+        if not user_id:
+            return JsonResponse({
+                'success': False,
+                'message': 'User ID is required'
+            }, status=400)
+        
+        try:
+            user = UserLogin.objects.get(id=user_id)
+            user_profile = UserProfile.objects.filter(user=user).first()
+            
+            # Check if payment PIN exists and is set
+            has_pin = user_profile and user_profile.payment_pin and user_profile.payment_pin.strip() != ''
+            
+            return JsonResponse({
+                'success': True,
+                'has_pin': has_pin
+            }, status=200)
+        except UserLogin.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'User not found'
+            }, status=404)
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error checking PIN: {str(e)}'
         }, status=500)

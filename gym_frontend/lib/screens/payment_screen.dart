@@ -65,20 +65,53 @@ class _PaymentScreenState extends State<PaymentScreen> {
       return;
     }
 
-    // Navigate to PIN entry screen for payment verification
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PinEntryScreen(
-          userId: widget.userId,
-          userName: _userName,
-          renewalMonths: widget.months,
-          amount: widget.amount.toDouble(),
-          paymentMethod: _selectedPaymentMethod!,
-          discountPercentage: 0,
-        ),
-      ),
-    );
+    // First check if user has payment PIN set
+    await _checkAndNavigateToPinFlow();
+  }
+
+  Future<void> _checkAndNavigateToPinFlow() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/api/payment/check-pin/'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'user_id': widget.userId}),
+      );
+
+      final data = json.decode(response.body);
+
+      if (data['has_pin'] == true) {
+        // PIN is set, go to Enter PIN screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PinEntryScreen(
+              userId: widget.userId,
+              userName: _userName,
+              renewalMonths: widget.months,
+              amount: widget.amount.toDouble(),
+              paymentMethod: _selectedPaymentMethod!,
+              discountPercentage: 0,
+            ),
+          ),
+        );
+      } else {
+        // PIN not set, go to Set PIN screen
+        Navigator.pushNamed(
+          context,
+          '/set-payment-pin',
+          arguments: {
+            'userId': widget.userId,
+            'userName': _userName,
+            'isPaymentFlow': true,
+            'renewalMonths': widget.months,
+            'amount': widget.amount,
+            'paymentMethod': _selectedPaymentMethod,
+          },
+        );
+      }
+    } catch (e) {
+      _showErrorDialog('Error checking PIN status. Please try again.');
+    }
   }
 
   void _showSuccessDialog() {

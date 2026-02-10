@@ -30,6 +30,7 @@ urlpatterns = [
     
     # Payment APIs
     path('api/payment/set-pin/', payment_views.set_payment_pin, name='set_payment_pin'),
+    path('api/payment/check-pin/', payment_views.check_payment_pin, name='check_payment_pin'),
     path('api/payment/verify-pin/', payment_views.verify_pin_and_process_payment, name='verify_pin_payment'),
     path('api/payment/receipt/<int:transaction_id>/', payment_views.generate_payment_receipt, name='generate_receipt'),
     path('api/payment/history/<int:user_id>/', payment_views.get_user_payment_history, name='payment_history'),
