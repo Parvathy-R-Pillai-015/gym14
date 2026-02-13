@@ -37,6 +37,7 @@ urlpatterns = [
     
     path('api/users/create/', views.create_user, name='create_user'),
     path('api/users/login/', views.login_user, name='login_user'),
+    path('api/users/trainers-by-goal/', views.get_trainers_by_goal, name='get_trainers_by_goal'),
     path('api/trainers/create/', views.create_trainer, name='create_trainer'),
     path('api/profile/create/', views.create_profile, name='create_profile'),
     path('api/profile/<int:user_id>/', views.get_profile, name='get_profile'),

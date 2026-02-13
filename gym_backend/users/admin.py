@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django import forms
+from django.utils.safestring import mark_safe
 from .models import UserLogin, Trainer, WorkoutVideo, ChatMessage, FoodRecipe, FoodItem, FoodEntry, OTP, PaymentTransaction
 
 # Register your models here.
@@ -79,6 +81,31 @@ class WorkoutVideoAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Filter trainers based on their goal_category
+        """
+        if db_field.name == 'uploaded_by':
+            # Get goal_type from POST (form submission) or from the object being edited
+            goal_type = None
+            
+            # Try to get from POST data
+            if request.method == 'POST':
+                goal_type = request.POST.get('goal_type')
+            
+            # Filter trainers by goal_category
+            if goal_type:
+                kwargs['queryset'] = Trainer.objects.filter(
+                    goal_category=goal_type
+                ).select_related('user').order_by('user__name')
+            else:
+                kwargs['queryset'] = Trainer.objects.select_related('user').order_by('user__name')
+        
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    
+    class Media:
+        js = ('admin/js/video_trainer_filter.js',)
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)

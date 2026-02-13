@@ -2069,3 +2069,40 @@ def get_all_chats_admin(request):
         'success': False,
         'message': 'Only GET method is allowed'
     }, status=405)
+
+
+@csrf_exempt
+def get_trainers_by_goal(request):
+    """
+    Get trainers filtered by goal_category
+    Used for admin dropdown filtering
+    """
+    if request.method == 'GET':
+        goal_type = request.GET.get('goal_type')
+        
+        if not goal_type:
+            trainers = Trainer.objects.select_related('user').order_by('user__name')
+        else:
+            trainers = Trainer.objects.filter(
+                goal_category=goal_type
+            ).select_related('user').order_by('user__name')
+        
+        trainers_list = [
+            {
+                'id': trainer.id,
+                'name': trainer.user.name,
+                'goal_category': trainer.goal_category or 'others'
+            }
+            for trainer in trainers
+        ]
+        
+        return JsonResponse({
+            'success': True,
+            'trainers': trainers_list
+        }, status=200)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Only GET method is allowed'
+    }, status=405)
+
