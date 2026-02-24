@@ -1010,7 +1010,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF6366F1), Color(0xFF818CF8)],
+                    colors: [Color(0xFF059669), Color(0xFF10B981)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -1071,7 +1071,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: const Text('View Full Diet Plan'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF0F766E),
+                        foregroundColor: const Color(0xFF059669),
                         minimumSize: const Size(double.infinity, 45),
                       ),
                     ),
@@ -1146,7 +1146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF059669), Color(0xFF10B981)],
+                  colors: [Color(0xFF2563EB), Color(0xFF3B82F6)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -1177,7 +1177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: const Text('Post Review'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF059669),
+                      foregroundColor: const Color(0xFF2563EB),
                       minimumSize: const Size(double.infinity, 45),
                     ),
                   ),
