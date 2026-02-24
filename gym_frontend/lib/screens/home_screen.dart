@@ -1215,7 +1215,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String statusText;
 
     if (isActive && !expiringSoon) {
-      cardColor = const Color(0xFF1E40AF).withOpacity(0.12);
+      cardColor = const Color(0xFF3B82F6).withOpacity(0.15);
       statusColor = const Color(0xFF1E40AF);
       statusText = 'Active';
     } else if (expiringSoon) {
