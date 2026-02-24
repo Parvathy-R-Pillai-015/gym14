@@ -82,7 +82,7 @@ class _AdminChatViewScreenState extends State<AdminChatViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: const Color(0xFF1F2933),
         title: const Text(
           'All Conversations',
           style: TextStyle(color: Colors.white),
@@ -127,7 +127,7 @@ class _AdminChatViewScreenState extends State<AdminChatViewScreen> {
                           leading: Stack(
                             children: [
                               CircleAvatar(
-                                backgroundColor: Colors.blue[300],
+                                backgroundColor: const Color(0xFF0891B2),
                                 radius: 28,
                                 child: Text(
                                   conversation['user_name'][0].toUpperCase(),
@@ -142,7 +142,7 @@ class _AdminChatViewScreenState extends State<AdminChatViewScreen> {
                                 right: 0,
                                 bottom: 0,
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.green[600],
+                                  backgroundColor: const Color(0xFF14B8A6),
                                   radius: 12,
                                   child: Text(
                                     conversation['trainer_name'][0].toUpperCase(),
@@ -175,9 +175,9 @@ class _AdminChatViewScreenState extends State<AdminChatViewScreen> {
                                       const TextSpan(text: ' ↔ '),
                                       TextSpan(
                                         text: conversation['trainer_name'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.green[700],
+                                          color: Color(0xFF0F766E),
                                         ),
                                       ),
                                     ],
@@ -350,7 +350,7 @@ class _AdminChatMessagesScreenState extends State<AdminChatMessagesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: const Color(0xFF1F2933),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -408,8 +408,8 @@ class _AdminChatMessagesScreenState extends State<AdminChatMessagesScreen> {
                           children: [
                             CircleAvatar(
                               backgroundColor: isUser
-                                  ? Colors.blue[300]
-                                  : Colors.green[300],
+                                  ? const Color(0xFF0891B2)
+                                  : const Color(0xFF14B8A6),
                               child: Icon(
                                 isUser ? Icons.person : Icons.fitness_center,
                                 color: Colors.white,

@@ -120,7 +120,7 @@ class _AdminChatTabState extends State<AdminChatTab> {
               leading: Stack(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.blue[300],
+                    backgroundColor: const Color(0xFF0891B2),
                     radius: 28,
                     child: Text(
                       conversation['user_name'][0].toUpperCase(),
@@ -135,7 +135,7 @@ class _AdminChatTabState extends State<AdminChatTab> {
                     right: 0,
                     bottom: 0,
                     child: CircleAvatar(
-                      backgroundColor: Colors.green[600],
+                      backgroundColor: const Color(0xFF14B8A6),
                       radius: 12,
                       child: Text(
                         conversation['trainer_name'][0].toUpperCase(),
@@ -163,9 +163,9 @@ class _AdminChatTabState extends State<AdminChatTab> {
                           const TextSpan(text: ' ↔ '),
                           TextSpan(
                             text: conversation['trainer_name'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.green[700],
+                              color: Color(0xFF0F766E),
                             ),
                           ),
                         ],
@@ -217,14 +217,14 @@ class _AdminChatTabState extends State<AdminChatTab> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.blue[50],
+                          color: const Color(0xFF0F766E).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           '${conversation['total_messages']} messages',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11,
-                            color: Colors.blue[700],
+                            color: Color(0xFF0F766E),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -313,7 +313,7 @@ class _AdminChatMessagesScreenState extends State<AdminChatMessagesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: const Color(0xFF1F2933),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -360,7 +360,7 @@ class _AdminChatMessagesScreenState extends State<AdminChatMessagesScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CircleAvatar(
-                              backgroundColor: isUser ? Colors.blue[300] : Colors.green[300],
+                              backgroundColor: isUser ? const Color(0xFF0891B2) : const Color(0xFF14B8A6),
                               child: Icon(
                                 isUser ? Icons.person : Icons.fitness_center,
                                 color: Colors.white,
@@ -382,7 +382,7 @@ class _AdminChatMessagesScreenState extends State<AdminChatMessagesScreen> {
                                             message['sender_name'],
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: isUser ? Colors.blue[700] : Colors.green[700],
+                                              color: isUser ? const Color(0xFF0891B2) : const Color(0xFF14B8A6),
                                               fontSize: 14,
                                             ),
                                           ),

@@ -134,7 +134,7 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text('Admin Dashboard', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: const Color(0xFF1F2933),
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
@@ -381,9 +381,9 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
           margin: const EdgeInsets.symmetric(vertical: 4),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.green[50],
+            color: const Color(0xFF0F766E).withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.green[200]!),
+            border: Border.all(color: const Color(0xFF14B8A6)),
           ),
           child: Row(
             children: [
@@ -455,9 +455,9 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
               margin: const EdgeInsets.only(left: 140),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.purple[50],
+                color: const Color(0xFF0F766E).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.purple[200]!),
+                border: Border.all(color: const Color(0xFF14B8A6)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -549,7 +549,7 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.fitness_center, size: 16, color: Color(0xFF7B4EFF)),
+                      const Icon(Icons.fitness_center, size: 16, color: Color(0xFF0F766E)),
                       const SizedBox(width: 4),
                       const Text(
                         'Trainer: ',
@@ -563,7 +563,7 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF7B4EFF),
+                          color: Color(0xFF0F766E),
                         ),
                       ),
                     ],
@@ -738,7 +738,7 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
             icon: const Icon(Icons.add),
             label: const Text('Add New Recipe'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF7B4EFF),
+              backgroundColor: const Color(0xFF0F766E),
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 48),
             ),
@@ -992,7 +992,7 @@ class _AdminDashboardNewState extends State<AdminDashboardNew> with SingleTicker
         });
       },
       backgroundColor: Colors.grey[200],
-      selectedColor: const Color(0xFF7B4EFF),
+      selectedColor: const Color(0xFF0F766E),
       labelStyle: TextStyle(
         color: _selectedFoodTypeFilter == value ? Colors.white : Colors.black,
       ),
