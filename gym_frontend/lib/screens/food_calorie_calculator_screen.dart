@@ -259,7 +259,7 @@ class _FoodCalorieCalculatorScreenState
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Food Calorie Calculator'),
-          backgroundColor: const Color(0xFF7B4EFF),
+          backgroundColor: const Color(0xFF1F2933),
           elevation: 0,
           bottom: const TabBar(
             tabs: [
@@ -294,7 +294,7 @@ class _FoodCalorieCalculatorScreenState
   Widget _buildDateSelector() {
     return Container(
       padding: const EdgeInsets.all(16),
-      color: const Color(0xFF7B4EFF).withOpacity(0.1),
+      color: const Color(0xFF0F766E).withOpacity(0.1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -361,8 +361,8 @@ class _FoodCalorieCalculatorScreenState
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF7B4EFF),
-            const Color(0xFFBB86FC),
+            const Color(0xFF0F766E),
+            const Color(0xFF14B8A6),
           ],
         ),
         borderRadius: BorderRadius.circular(15),
@@ -515,7 +515,7 @@ class _FoodCalorieCalculatorScreenState
               margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xFF7B4EFF).withOpacity(0.1),
+                color: const Color(0xFF0F766E).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -586,7 +586,7 @@ class _FoodCalorieCalculatorScreenState
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF7B4EFF),
+                backgroundColor: const Color(0xFF0F766E),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -664,12 +664,12 @@ class _FoodCalorieCalculatorScreenState
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF7B4EFF).withOpacity(0.2),
+                      color: const Color(0xFF0F766E).withOpacity(0.2),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.fastfood,
-                      color: Color(0xFF7B4EFF),
+                      color: Color(0xFF0F766E),
                     ),
                   ),
                   title: Text(entry['food_name']),
@@ -683,7 +683,7 @@ class _FoodCalorieCalculatorScreenState
                         '${entry['calculated_calories'].toStringAsFixed(0)} cal',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF7B4EFF),
+                          color: const Color(0xFF0F766E),
                         ),
                       ),
                       IconButton(

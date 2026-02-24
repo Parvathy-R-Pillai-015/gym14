@@ -70,7 +70,7 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Renew Subscription'),
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: const Color(0xFF1F2933),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -84,8 +84,8 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      const Color(0xFF7B4EFF),
-                      const Color(0xFFBB86FC),
+                      const Color(0xFF0F766E),
+                      const Color(0xFF14B8A6),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(15),
@@ -141,13 +141,13 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: isSelected
-                                    ? const Color(0xFF7B4EFF)
+                                    ? const Color(0xFF0F766E)
                                     : Colors.grey[300]!,
                                 width: isSelected ? 2 : 1,
                               ),
                               borderRadius: BorderRadius.circular(12),
                               color: isSelected
-                                  ? const Color(0xFF7B4EFF).withOpacity(0.05)
+                                  ? const Color(0xFF0F766E).withOpacity(0.05)
                                   : Colors.white,
                             ),
                             child: Row(
@@ -159,7 +159,7 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                                     setState(
                                         () => _selectedMonths = value ?? 1);
                                   },
-                                  activeColor: const Color(0xFF7B4EFF),
+                                  activeColor: const Color(0xFF0F766E),
                                 ),
                                 Expanded(
                                   child: Column(
@@ -193,7 +193,7 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xFF7B4EFF),
+                                        color: const Color(0xFF0F766E),
                                       ),
                                     ),
                                     Text(
@@ -235,7 +235,7 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF7B4EFF),
+                            color: Color(0xFF0F766E),
                           ),
                         ),
                       ],
@@ -280,7 +280,7 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                     onSelected: (val) {
                       if (val) setState(() => _selectedPaymentMethod = m['key']!);
                     },
-                    selectedColor: const Color(0xFF7B4EFF).withOpacity(0.15),
+                    selectedColor: const Color(0xFF0F766E).withOpacity(0.15),
                   );
                 }).toList(),
               ),
@@ -292,7 +292,7 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                 child: ElevatedButton(
                   onPressed: _isProcessing ? null : _renewSubscription,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7B4EFF),
+                    backgroundColor: const Color(0xFF0F766E),
                     disabledBackgroundColor: Colors.grey[400],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -327,7 +327,7 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                 child: OutlinedButton(
                   onPressed: _isProcessing ? null : () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFF7B4EFF)),
+                    side: const BorderSide(color: Color(0xFF0F766E)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -337,7 +337,7 @@ class _SubscriptionRenewalScreenState extends State<SubscriptionRenewalScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF7B4EFF),
+                      color: Color(0xFF0F766E),
                     ),
                   ),
                 ),

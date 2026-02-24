@@ -49,7 +49,7 @@ class _FoodRecipesScreenState extends State<FoodRecipesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Healthy Food Recipes'),
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: const Color(0xFF1F2933),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -210,13 +210,13 @@ class _RecipeCardState extends State<RecipeCard> {
                 },
                 icon: Icon(
                   _isExpanded ? Icons.expand_less : Icons.expand_more,
-                  color: const Color(0xFF7B4EFF),
+                  color: const Color(0xFF0F766E),
                   size: 24,
                 ),
                 label: Text(
                   _isExpanded ? 'Hide Details' : 'View Details',
                   style: const TextStyle(
-                    color: Color(0xFF7B4EFF),
+                    color: const Color(0xFF0F766E),
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),

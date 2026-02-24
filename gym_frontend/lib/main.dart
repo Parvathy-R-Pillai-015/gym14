@@ -14,8 +14,48 @@ class MyApp extends StatelessWidget {
       title: 'Fitness Gym',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF7B4EFF),
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xFF0F766E),
+          onPrimary: Colors.white,
+          secondary: Color(0xFF14B8A6),
+          onSecondary: Colors.white,
+          surface: Colors.white,
+          onSurface: Color(0xFF111827),
+          background: Color(0xFFF5F7FA),
+          onBackground: Color(0xFF111827),
+          error: Color(0xFFDC2626),
+          onError: Colors.white,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF5F7FA),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF1F2933),
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF0F766E),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: const Color(0xFF0F766E),
+            side: const BorderSide(color: Color(0xFF0F766E)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         ),
         useMaterial3: true,
       ),

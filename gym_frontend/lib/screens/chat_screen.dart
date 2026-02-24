@@ -125,7 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           if (!isMine) ...[
             CircleAvatar(
-              backgroundColor: senderType == 'trainer' ? Colors.green[600] : Colors.blue[400],
+              backgroundColor: senderType == 'trainer' ? const Color(0xFF0F766E) : const Color(0xFF0891B2),
               child: Icon(
                 senderType == 'trainer' ? Icons.fitness_center : Icons.person,
                 color: Colors.white,
@@ -139,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: isMine 
-                    ? (widget.senderType == 'trainer' ? Colors.green[600] : Colors.blue[500])
+                    ? (widget.senderType == 'trainer' ? const Color(0xFF0F766E) : const Color(0xFF0891B2))
                     : Colors.grey[300],
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
@@ -182,7 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
           if (isMine) ...[
             const SizedBox(width: 8),
             CircleAvatar(
-              backgroundColor: widget.senderType == 'trainer' ? Colors.green[700] : Colors.blue[600],
+              backgroundColor: widget.senderType == 'trainer' ? const Color(0xFF0F766E) : const Color(0xFF0891B2),
               child: Icon(
                 widget.senderType == 'trainer' ? Icons.fitness_center : Icons.person,
                 color: Colors.white,
@@ -220,14 +220,14 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green[700],
+        backgroundColor: const Color(0xFF1F2933),
         title: Row(
           children: [
             CircleAvatar(
               backgroundColor: Colors.white,
               child: Text(
                 widget.trainerName[0].toUpperCase(),
-                style: TextStyle(color: Colors.green[700]),
+                style: const TextStyle(color: Color(0xFF1F2933)),
               ),
             ),
             const SizedBox(width: 12),
@@ -320,7 +320,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 const SizedBox(width: 12),
                 FloatingActionButton(
                   onPressed: _sendMessage,
-                  backgroundColor: Colors.green[700],
+                  backgroundColor: const Color(0xFF0F766E),
                   child: const Icon(Icons.send, color: Colors.white),
                 ),
               ],

@@ -192,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Card(
-                color: const Color(0xFF7B4EFF).withOpacity(0.1),
+                color: const Color(0xFF0F766E).withOpacity(0.1),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
@@ -205,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF7B4EFF),
+                              color: Color(0xFF0F766E),
                             ),
                           ),
                           const Text('Accepted'),
@@ -414,7 +414,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6B9D),
+                backgroundColor: const Color(0xFF0F766E),
                 foregroundColor: Colors.white,
               ),
               child: const Text('Submit Review'),
@@ -453,7 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Color(0xFF4CAF50),
+                    color: Color(0xFF14B8A6),
                   ),
                 ),
                 Text(
@@ -496,7 +496,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fitness Gym'),
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -532,7 +532,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    const Color(0xFF7B4EFF).withOpacity(0.1),
+                    const Color(0xFF0F766E).withOpacity(0.05),
                     Colors.white,
                   ],
                 ),
@@ -580,7 +580,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         _buildActionCard(
                           'Chat with Trainer',
                           Icons.chat_bubble,
-                          const Color(0xFF4CAF50),
+                          const Color(0xFF0F766E),
                           () {
                             if (_userProfile != null && _userProfile!['assigned_trainer'] != null) {
                               final trainer = _userProfile!['assigned_trainer'];
@@ -689,13 +689,13 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF7B4EFF).withOpacity(0.1),
+                  color: const Color(0xFF0F766E).withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.person,
                   size: 30,
-                  color: Color(0xFF7B4EFF),
+                  color: Color(0xFF0F766E),
                 ),
               ),
               const SizedBox(width: 15),
@@ -724,12 +724,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             decoration: BoxDecoration(
-              color: const Color(0xFF7B4EFF).withOpacity(0.05),
+              color: const Color(0xFF0F766E).withOpacity(0.05),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: [
-                const Icon(Icons.phone, size: 20, color: Color(0xFF7B4EFF)),
+                const Icon(Icons.phone, size: 20, color: Color(0xFF0F766E)),
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -908,7 +908,7 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF7B4EFF).withOpacity(0.05),
+                    const Color(0xFF0F766E).withOpacity(0.05),
                     Colors.white,
                   ],
                   begin: Alignment.topLeft,
@@ -921,7 +921,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, color: Color(0xFF7B4EFF)),
+                    const Icon(Icons.calendar_today, color: Color(0xFF0F766E)),
                     const SizedBox(width: 8),
                     const Text(
                       'Attendance',
@@ -943,7 +943,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF7B4EFF),
+                            color: Color(0xFF0F766E),
                           ),
                         ),
                         const Text('Accepted'),
@@ -977,7 +977,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               : 'Already Requested',
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF7B4EFF),
+                          backgroundColor: const Color(0xFF0F766E),
                           foregroundColor: Colors.white,
                           disabledBackgroundColor: Colors.grey,
                         ),
@@ -990,8 +990,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: const Icon(Icons.history),
                         label: const Text('View History'),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFF7B4EFF),
-                          side: const BorderSide(color: Color(0xFF7B4EFF)),
+                          foregroundColor: const Color(0xFF0F766E),
+                          side: const BorderSide(color: Color(0xFF0F766E)),
                         ),
                       ),
                     ),
@@ -1010,7 +1010,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF4CAF50), Color(0xFF8BC34A)],
+                    colors: [Color(0xFF0F766E), Color(0xFF14B8A6)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -1071,7 +1071,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: const Text('View Full Diet Plan'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF4CAF50),
+                        foregroundColor: const Color(0xFF0F766E),
                         minimumSize: const Size(double.infinity, 45),
                       ),
                     ),
@@ -1087,7 +1087,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFFE91E63), Color(0xFFF06292)],
+                  colors: [Color(0xFFD1454B), Color(0xFFE57373)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -1130,7 +1130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: const Text('Browse Videos'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFFE91E63),
+                      foregroundColor: const Color(0xFFD1454B),
                       minimumSize: const Size(double.infinity, 45),
                     ),
                   ),
@@ -1146,7 +1146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFFFF6B9D), Color(0xFFFFA06B)],
+                  colors: [Color(0xFFEA580C), Color(0xFFFB923C)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -1177,7 +1177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: const Text('Post Review'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFFFF6B9D),
+                      foregroundColor: const Color(0xFFEA580C),
                       minimumSize: const Size(double.infinity, 45),
                     ),
                   ),
@@ -1405,7 +1405,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildInfoItem(String label, String value, IconData icon) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: const Color(0xFF7B4EFF)),
+        Icon(icon, size: 18, color: const Color(0xFF0F766E)),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
@@ -1761,7 +1761,7 @@ class _DietPlanDetailsDialogState extends State<_DietPlanDetailsDialog> {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: Color(0xFF4CAF50),
+                color: Color(0xFF0F766E),
               ),
             ),
             const SizedBox(height: 8),
