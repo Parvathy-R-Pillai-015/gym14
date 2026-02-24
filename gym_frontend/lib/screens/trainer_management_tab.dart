@@ -298,7 +298,7 @@ class _TrainerManagementTabState extends State<TrainerManagementTab> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7B4EFF),
+                    backgroundColor: const Color(0xFF0F766E),
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Create Trainer'),
@@ -354,9 +354,9 @@ class _TrainerManagementTabState extends State<TrainerManagementTab> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.purple[50],
+                      color: const Color(0xFF0F766E).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.purple),
+                      border: Border.all(color: const Color(0xFF14B8A6)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,7 +384,7 @@ class _TrainerManagementTabState extends State<TrainerManagementTab> {
                     _loadAllTrainers();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7B4EFF),
+                    backgroundColor: const Color(0xFF0F766E),
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('OK'),
@@ -479,7 +479,7 @@ class _TrainerManagementTabState extends State<TrainerManagementTab> {
             icon: const Icon(Icons.person_add, color: Colors.white),
             label: const Text('Add New Trainer', style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF7B4EFF),
+              backgroundColor: const Color(0xFF0F766E),
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -489,7 +489,7 @@ class _TrainerManagementTabState extends State<TrainerManagementTab> {
         ),
         // Summary Card
         Card(
-          color: Colors.blue[50],
+          color: const Color(0xFF0F766E).withOpacity(0.1),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
