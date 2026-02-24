@@ -779,7 +779,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFF4CAF50), Color(0xFF66BB6A)],
+                          colors: [Color(0xFF0F766E), Color(0xFF14B8A6)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -825,7 +825,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                             label: const Text('View Food Calories'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              foregroundColor: const Color(0xFF4CAF50),
+                              foregroundColor: const Color(0xFF0F766E),
                               minimumSize: const Size(double.infinity, 45),
                             ),
                           ),
@@ -842,7 +842,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFFE91E63), Color(0xFFF06292)],
+                          colors: [Color(0xFFD1454B), Color(0xFFE57373)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -889,7 +889,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                             label: const Text('Upload Video'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              foregroundColor: const Color(0xFFE91E63),
+                              foregroundColor: const Color(0xFFD1454B),
                               minimumSize: const Size(double.infinity, 45),
                             ),
                           ),
