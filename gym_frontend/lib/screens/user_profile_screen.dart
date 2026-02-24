@@ -407,23 +407,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     prefixIcon: Icon(Icons.person_pin),
                     hintText: 'Choose your trainer',
                   ),
+                  isExpanded: true,
                   value: _selectedTrainerId,
+                  selectedItemBuilder: (context) {
+                    return _availableTrainers.map((trainer) {
+                      return Text(
+                        trainer['name'],
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    }).toList();
+                  },
                   items: _availableTrainers.map((trainer) {
                     return DropdownMenuItem<int>(
                       value: trainer['id'],
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            trainer['name'],
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '${trainer['experience']} years exp - ${trainer['specialization']}',
-                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              trainer['name'],
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              '${trainer['experience']} years exp - ${trainer['specialization']}',
+                              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   }).toList(),

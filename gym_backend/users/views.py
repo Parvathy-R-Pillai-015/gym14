@@ -1935,23 +1935,42 @@ def get_chat_messages(request, user_id, trainer_id):
 @csrf_exempt  
 def get_trainer_chats(request, trainer_id):
     """
-    Get all users who have chatted with this trainer
+    Get all users who have chatted with this trainer or are assigned to them
     """
     if request.method == 'GET':
         try:
             trainer = Trainer.objects.get(id=trainer_id)
-            
-            # Get distinct users who have chatted with this trainer
-            user_ids = ChatMessage.objects.filter(trainer=trainer).values_list('user_id', flat=True).distinct()
-            
-            chats_list = []
-            for user_profile in UserProfile.objects.filter(id__in=user_ids):
+
+            chats_by_user = {}
+
+            # Start with all assigned users so trainers can chat with every assigned user
+            assigned_users = UserProfile.objects.filter(
+                assigned_trainer=trainer
+            ).select_related('user')
+
+            for user_profile in assigned_users:
+                chats_by_user[user_profile.id] = {
+                    'user_id': user_profile.user.id,
+                    'user_name': user_profile.user.name,
+                    'user_email': user_profile.user.emailid,
+                    'last_message': '',
+                    'last_message_time': '',
+                    'unread_count': 0,
+                    '_last_message_dt': None
+                }
+
+            # Merge in users who have chatted with this trainer (including unassigned legacy chats)
+            user_ids = ChatMessage.objects.filter(
+                trainer=trainer
+            ).values_list('user_id', flat=True).distinct()
+
+            for user_profile in UserProfile.objects.filter(id__in=user_ids).select_related('user'):
                 # Get last message
                 last_message = ChatMessage.objects.filter(
                     user=user_profile,
                     trainer=trainer
                 ).order_by('-created_at').first()
-                
+
                 # Count unread messages from user
                 unread_count = ChatMessage.objects.filter(
                     user=user_profile,
@@ -1959,18 +1978,28 @@ def get_trainer_chats(request, trainer_id):
                     sender_type='user',
                     is_read=False
                 ).count()
-                
-                # Convert UTC to local timezone for display
-                last_message_time = timezone.localtime(last_message.created_at).strftime('%Y-%m-%d %H:%M:%S') if last_message else ''
-                
-                chats_list.append({
+
+                last_message_dt = timezone.localtime(last_message.created_at) if last_message else None
+                last_message_time = last_message_dt.strftime('%Y-%m-%d %H:%M:%S') if last_message_dt else ''
+
+                chats_by_user[user_profile.id] = {
                     'user_id': user_profile.user.id,
                     'user_name': user_profile.user.name,
                     'user_email': user_profile.user.emailid,
                     'last_message': last_message.message if last_message else '',
                     'last_message_time': last_message_time,
-                    'unread_count': unread_count
-                })
+                    'unread_count': unread_count,
+                    '_last_message_dt': last_message_dt
+                }
+
+            chats_list = list(chats_by_user.values())
+            chats_list.sort(
+                key=lambda item: item.get('_last_message_dt').timestamp() if item.get('_last_message_dt') else 0,
+                reverse=True
+            )
+
+            for chat in chats_list:
+                chat.pop('_last_message_dt', None)
             
             return JsonResponse({
                 'success': True,
