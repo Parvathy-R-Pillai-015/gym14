@@ -223,7 +223,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
           child: Column(
             children: [
               Card(
-                color: const Color(0xFF7B4EFF).withOpacity(0.1),
+                color: const Color(0xFF0F766E).withOpacity(0.1),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
@@ -236,7 +236,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF7B4EFF),
+                              color: Color(0xFF0F766E),
                             ),
                           ),
                           const Text('Accepted'),
@@ -677,7 +677,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Trainer Dashboard - ${widget.trainerName}'),
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: const Color(0xFF1F2933),
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -956,7 +956,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                                 Row(
                                   children: [
                                     CircleAvatar(
-                                      backgroundColor: const Color(0xFF7B4EFF),
+                                      backgroundColor: const Color(0xFF0F766E),
                                       child: Text(
                                         user['name'][0].toUpperCase(),
                                         style: const TextStyle(
@@ -1052,7 +1052,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                                       label: const Text('Attendance'),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(
-                                          0xFF7B4EFF,
+                                          0xFF0F766E,
                                         ),
                                         foregroundColor: Colors.white,
                                       ),
@@ -1245,7 +1245,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
   Widget _buildInfoChip(IconData icon, String label, String value) {
     return Column(
       children: [
-        Icon(icon, size: 20, color: const Color(0xFF7B4EFF)),
+        Icon(icon, size: 20, color: const Color(0xFF0F766E)),
         const SizedBox(height: 4),
         Text(label, style: const TextStyle(fontSize: 10, color: Colors.grey)),
         Text(

@@ -111,7 +111,7 @@ class _ManageVideosScreenState extends State<ManageVideosScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Videos'),
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color(0xFF1F2933),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -203,7 +203,7 @@ class _ManageVideosScreenState extends State<ManageVideosScreen> {
                                   _buildInfoChip(
                                     Icons.flag,
                                     video['goal_type'].toString().toUpperCase(),
-                                    Colors.blue,
+                                    const Color(0xFF0F766E),
                                   ),
                                   _buildInfoChip(
                                     Icons.trending_up,
@@ -217,7 +217,7 @@ class _ManageVideosScreenState extends State<ManageVideosScreen> {
                                   _buildInfoChip(
                                     Icons.fitness_center,
                                     '${video['min_weight_difference']}-${video['max_weight_difference']} kg',
-                                    Colors.purple,
+                                    const Color(0xFF14B8A6),
                                   ),
                                 ],
                               ),

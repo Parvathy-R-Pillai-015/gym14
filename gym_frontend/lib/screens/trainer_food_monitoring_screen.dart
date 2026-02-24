@@ -148,7 +148,7 @@ class _TrainerFoodMonitoringScreenState
             children: [
               // Statistics Card
               Card(
-                color: const Color(0xFF7B4EFF).withOpacity(0.1),
+                color: const Color(0xFF0F766E).withOpacity(0.1),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
@@ -163,7 +163,7 @@ class _TrainerFoodMonitoringScreenState
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFF7B4EFF),
+                                  color: Color(0xFF0F766E),
                                 ),
                               ),
                               const Text('Avg/Day', style: TextStyle(fontSize: 12)),
@@ -311,7 +311,7 @@ class _TrainerFoodMonitoringScreenState
     return Scaffold(
       appBar: AppBar(
         title: const Text('Food Monitoring'),
-        backgroundColor: const Color(0xFF7B4EFF),
+        backgroundColor: const Color(0xFF1F2933),
         foregroundColor: Colors.white,
       ),
       body: _isLoading
@@ -408,8 +408,8 @@ class _TrainerFoodMonitoringScreenState
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
-                                      const Color(0xFF7B4EFF),
-                                      const Color(0xFF7B4EFF).withOpacity(0.7),
+                                      const Color(0xFF0F766E),
+                                      const Color(0xFF0F766E).withOpacity(0.7),
                                     ],
                                   ),
                                   borderRadius: const BorderRadius.only(
@@ -591,7 +591,7 @@ class _TrainerFoodMonitoringScreenState
                                       ),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            const Color(0xFF7B4EFF),
+                                            const Color(0xFF0F766E),
                                         foregroundColor: Colors.white,
                                       ),
                                     ),

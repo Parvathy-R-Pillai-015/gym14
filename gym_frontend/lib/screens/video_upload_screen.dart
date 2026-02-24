@@ -213,7 +213,7 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Upload Workout Video'),
-        backgroundColor: const Color(0xFF2196F3),
+        backgroundColor: const Color(0xFF1F2933),
       ),
       body: _isUploading
           ? Center(
@@ -246,17 +246,17 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
                   children: [
                     // Info card
                     Card(
-                      color: Colors.blue.shade50,
+                      color: const Color(0xFF0F766E).withOpacity(0.1),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Row(
                           children: [
-                            Icon(Icons.info_outline, color: Colors.blue.shade700),
+                            const Icon(Icons.info_outline, color: Color(0xFF0F766E)),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 'Upload workout videos for your assigned goal: ${widget.trainerName}',
-                                style: TextStyle(color: Colors.blue.shade700),
+                                style: const TextStyle(color: Color(0xFF0F766E)),
                               ),
                             ),
                           ],
@@ -408,7 +408,7 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
                           style: TextStyle(fontSize: 18),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2196F3),
+                          backgroundColor: const Color(0xFF0F766E),
                         ),
                       ),
                     ),

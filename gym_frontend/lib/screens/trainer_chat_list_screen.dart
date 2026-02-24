@@ -87,7 +87,7 @@ class _TrainerChatListScreenState extends State<TrainerChatListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green[700],
+        backgroundColor: const Color(0xFF1F2933),
         title: const Text('Chat Messages', style: TextStyle(color: Colors.white)),
       ),
       body: _isLoading
@@ -135,7 +135,7 @@ class _TrainerChatListScreenState extends State<TrainerChatListScreen> {
                         leading: Stack(
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.green[300],
+                              backgroundColor: const Color(0xFF14B8A6),
                               radius: 28,
                               child: Text(
                                 chat['user_name'][0].toUpperCase(),
