@@ -262,6 +262,10 @@ class _FoodCalorieCalculatorScreenState
           backgroundColor: const Color(0xFF1F2933),
           elevation: 0,
           bottom: const TabBar(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            indicatorColor: Color(0xFF14B8A6),
+            indicatorWeight: 3,
             tabs: [
               Tab(text: 'Today'),
               Tab(text: 'History'),
