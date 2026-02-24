@@ -1146,7 +1146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFFEA580C), Color(0xFFFB923C)],
+                  colors: [Color(0xFF2563EB), Color(0xFF60A5FA)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -1177,7 +1177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: const Text('Post Review'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFFEA580C),
+                      foregroundColor: const Color(0xFF2563EB),
                       minimumSize: const Size(double.infinity, 45),
                     ),
                   ),
